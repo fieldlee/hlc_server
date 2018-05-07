@@ -1,0 +1,6 @@
+{
+	"global": {
+		"name": "hlc_global_server",
+		"domain_port": "192.168.0.251:20000"
+	}
+}
