@@ -629,7 +629,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","medder":"` + mx["OperatorName"].(string) + `","medId":"` + mx["id"].(string) + `","medicationTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","medder":"` + mx["OperatorName"].(string) + `","medId":"` + mx["id"].(string) + `","medicationTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
@@ -779,7 +779,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str := `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","preventer":"` + mx["OperatorName"].(string) + `","preventName":"` + mx["Immunion"].(string) + `","preventResult":"` + mx["CheckResult"].(string) + `","preventionTime":"` + mx["CheckDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
+		str := `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","preventer":"` + mx["OperatorName"].(string) + `","preventName":"` + mx["Immunion"].(string) + `","preventResult":"` + mx["CheckResult"].(string) + `","preventionTime":"` + mx["CheckDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
