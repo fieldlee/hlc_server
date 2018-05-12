@@ -1239,7 +1239,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outModule":"` + mx["CLPCNO"].(string) + `","FattenedTime":"` + mx["SysDate"].(string) + `","operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outModule":"` + mx["CLPCNO"].(string) + `","FattenedTime":"` + mx["SysDate"].(string) + `","operation":"Out-Fence","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
