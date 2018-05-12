@@ -492,7 +492,7 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","feeder":"` + mx["Name"].(string) + `","feedId":"` + mx["Id"].(string) + `","feedTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","feeder":"` + mx["Name"].(string) + `","feedId":"` + mx["Id"].(string) + `","feedTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"喂养"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
