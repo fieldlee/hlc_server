@@ -139,7 +139,7 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 			return nil
 		}
 
-		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","username":"` + mx["username"].(string) + `","inModule":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lairage","operator":"` + mx["CreatePerson"].(string) + `","createTime":"` + mx["createTime"].(string) + `"},`
+		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","username":"` + mx["username"].(string) + `","inModule":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"入栏","operator":"` + mx["CreatePerson"].(string) + `","createTime":"` + mx["createTime"].(string) + `"},`
 	}
 
 	m["args"].([]string)[1] = "[" + str[0:len(str) - 1] + "]"
@@ -629,7 +629,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","medder":"` + mx["OperatorName"].(string) + `","medId":"` + mx["id"].(string) + `","medicationTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","medder":"` + mx["OperatorName"].(string) + `","medId":"` + mx["id"].(string) + `","medicationTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"防疫"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
@@ -779,7 +779,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str := `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","preventer":"` + mx["OperatorName"].(string) + `","preventName":"` + mx["Immunion"].(string) + `","preventResult":"` + mx["CheckResult"].(string) + `","preventionTime":"` + mx["CheckDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication"}`
+		str := `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","preventer":"` + mx["OperatorName"].(string) + `","preventName":"` + mx["Immunion"].(string) + `","preventResult":"` + mx["CheckResult"].(string) + `","preventionTime":"` + mx["CheckDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"检疫"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
@@ -941,7 +941,7 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","inspector":"` + mx["Name"].(string) + `","inspectId":"` + mx["id"].(string) + `","treatment":"` + mx["Treatment"].(string) + `","inspectResult":"` + mx["InspectResult"].(string) + `","saveTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","inspector":"` + mx["Name"].(string) + `","inspectId":"` + mx["id"].(string) + `","treatment":"` + mx["Treatment"].(string) + `","inspectResult":"` + mx["InspectResult"].(string) + `","saveTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"治疗"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
@@ -1090,7 +1090,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str := `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","loser":"` + mx["Name"].(string) + `","lostTreat":"` + mx["TreatMethod"].(string) + `","lostCause":"` + mx["CauseDeath"].(string) + `","lostTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
+		str := `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","loser":"` + mx["Name"].(string) + `","lostTreat":"` + mx["TreatMethod"].(string) + `","lostCause":"` + mx["CauseDeath"].(string) + `","lostTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"灭尸"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
@@ -1239,7 +1239,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 			return nil
 		}
 
-		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outModule":"` + mx["CLPCNO"].(string) + `","FattenedTime":"` + mx["SysDate"].(string) + `","operation":"Out-Fence","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
+		str := `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outModule":"` + mx["CLPCNO"].(string) + `","FattenedTime":"` + mx["SysDate"].(string) + `","operation":"出栏","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
