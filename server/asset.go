@@ -1090,7 +1090,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str := `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","loser":"` + mx["Name"].(string) + `","lostTreat":"` + mx["TreatMethod"].(string) + `","lostCause":"` + mx["CauseDeath"].(string) + `","lostTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"灭尸"}`
+		str := `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","loser":"` + mx["Name"].(string) + `","lostTreat":"` + mx["TreatMethod"].(string) + `","lostCause":"` + mx["CauseDeath"].(string) + `","lostTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"灭失"}`
 
 		m := make(map[string]interface{})
 		m["fcn"] = "ChangeProduct"
