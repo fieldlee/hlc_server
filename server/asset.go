@@ -752,7 +752,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 
 	return nil
 }
-
+//批量或者单个操作
 func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	m := make(map[string]interface{})
 	m["fcn"] = fcn
