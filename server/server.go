@@ -18,7 +18,7 @@ type Host struct {
 
 type Config struct {
 	Hosts	[]Host	`json:"hosts"`
-	Global	Host	`json:global"`
+	Global	Host	`json:"global"`
 }
 
 type Remote struct {}
