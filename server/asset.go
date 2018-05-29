@@ -10,6 +10,7 @@ import (
 	"strconv"
 
 	"model"
+	"errors"
 )
 
 type Asset struct {
@@ -25,109 +26,18 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["PCList"]
-	if !ok {
-		result.Message = "PCList required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["PCList"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "PCList should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"PCList"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["CreatePerson"]
-	if !ok {
-		result.Message = "CreatePerson required"
+	err1 := verifyParamString(mx,result,[] string{"CreatePerson","username","PCNO","isType","species","TaskGps","createTime"})
+	if err1 != nil {
 		return nil
 	}
-	switch mx["CreatePerson"].(type) {
-	case string:
-	default:
-		result.Message = "CreatePerson should be string"
-		return nil
-	}
-
-	_, ok = mx["username"]
-	if !ok {
-		result.Message = "PCList required"
-		return nil
-	}
-	switch mx["username"].(type) {
-	case string:
-	default:
-		result.Message = "username should be string"
-		return nil
-	}
-
-	_, ok = mx["PCNO"]
-	if !ok {
-		result.Message = "PCNO required"
-		return nil
-	}
-	switch mx["PCNO"].(type) {
-	case string:
-	default:
-		result.Message = "PCNO should be string"
-		return nil
-	}
-
-	_, ok = mx["isType"]
-	if !ok {
-		result.Message = "isType required"
-		return nil
-	}
-	switch mx["isType"].(type) {
-	case string:
-	default:
-		result.Message = "isType should be string"
-		return nil
-	}
-
-	_, ok = mx["species"]
-	if !ok {
-		result.Message = "species required"
-		return nil
-	}
-	switch mx["species"].(type) {
-	case string:
-	default:
-		result.Message = "species should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
-		return nil
-	}
-
-	_, ok = mx["createTime"]
-	if !ok {
-		result.Message = "createTime required"
-		return nil
-	}
-	switch mx["createTime"].(type) {
-	case string:
-	default:
-		result.Message = "createTime should be string"
-		return nil
-	}
-
-	m := make(map[string]interface{})
-	m["fcn"] = "Register"
-	m["args"] = make([]string, 1)
-	m["peers"] = []string{"peer1"}
-
 	var str string
 
 	for i := 0; i < len(mx["PCList"].([]interface{})); i++ {
@@ -199,67 +109,19 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["PNO"]
-	if !ok {
-		result.Message = "PNO required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["PNO"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "PNO should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"PNO"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["Name"]
-	if !ok {
-		result.Message = "Name required"
-		return nil
-	}
-	switch mx["Name"].(type) {
-	case string:
-	default:
-		result.Message = "Name should be string"
+	err1 := verifyParamString(mx,result,[] string{"Name","Id","SysDate","TaskGps"})
+	if err1 != nil {
 		return nil
 	}
 
-	_, ok = mx["Id"]
-	if !ok {
-		result.Message = "Id required"
-		return nil
-	}
-	switch mx["Id"].(type) {
-	case string:
-	default:
-		result.Message = "Id should be string"
-		return nil
-	}
-
-	_, ok = mx["SysDate"]
-	if !ok {
-		result.Message = "SysDate required"
-		return nil
-	}
-	switch mx["Id"].(type) {
-	case string:
-	default:
-		result.Message = "SysDate should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
-		return nil
-	}
 	var str string
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
@@ -281,65 +143,16 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["PNO"]
-	if !ok {
-		result.Message = "PNO required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["PNO"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "PNO should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"PNO"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["OperatorName"]
-	if !ok {
-		result.Message = "OperatorName required"
-		return nil
-	}
-	switch mx["OperatorName"].(type) {
-	case string:
-	default:
-		result.Message = "OperatorName should be string"
-		return nil
-	}
-
-	_, ok = mx["SysDate"]
-	if !ok {
-		result.Message = "SysDate required"
-		return nil
-	}
-	switch mx["SysDate"].(type) {
-	case string:
-	default:
-		result.Message = "SysDate should be string"
-		return nil
-	}
-
-	_, ok = mx["id"]
-	if !ok {
-		result.Message = "id required"
-		return nil
-	}
-	switch mx["id"].(type) {
-	case string:
-	default:
-		result.Message = "id should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
+	err1 := verifyParamString(mx,result,[] string{"OperatorName","SysDate","id","TaskGps"})
+	if err1 != nil {
 		return nil
 	}
 	var str string
@@ -363,80 +176,19 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	log.Println(mx)
-	_, ok := mx["EarTag"]
-	if !ok {
-		result.Message = "EarTag required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["EarTag"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "EarTag should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"EarTag"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["OperatorName"]
-	if !ok {
-		result.Message = "OperatorName required"
-		return nil
-	}
-	switch mx["OperatorName"].(type) {
-	case string:
-	default:
-		result.Message = "OperatorName should be string"
+	err1 := verifyParamString(mx,result,[] string{"OperatorName","Immunion","CheckDate","CheckResult","TaskGps"})
+	if err1 != nil {
 		return nil
 	}
 
-	_, ok = mx["Immunion"]
-	if !ok {
-		result.Message = "Immunion required"
-		return nil
-	}
-	switch mx["Immunion"].(type) {
-	case string:
-	default:
-		result.Message = "Immunion should be string"
-		return nil
-	}
-
-	_, ok = mx["CheckDate"]
-	if !ok {
-		result.Message = "CheckDate required"
-		return nil
-	}
-	switch mx["CheckDate"].(type) {
-	case string:
-	default:
-		result.Message = "CheckDate should be string"
-		return nil
-	}
-
-	_, ok = mx["CheckResult"]
-	if !ok {
-		result.Message = "CheckResult required"
-		return nil
-	}
-	switch mx["CheckResult"].(type) {
-	case string:
-	default:
-		result.Message = "CheckResult should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
-		return nil
-	}
 	var str string
 	for i := 0; i < len(mx["EarTag"].([]interface{})); i++ {
 		switch mx["EarTag"].([]interface{})[i].(type) {
@@ -460,92 +212,19 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["PNO"]
-	if !ok {
-		result.Message = "PNO required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["PNO"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "PNO should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"PNO"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["Name"]
-	if !ok {
-		result.Message = "Name required"
+	err1 := verifyParamString(mx,result,[] string{"Name","InspectResult","SysDate","Treatment","TaskGps","id"})
+	if err1 != nil {
 		return nil
 	}
 
-	switch mx["Name"].(type) {
-	case string:
-	default:
-		result.Message = "Name should be string"
-		return nil
-	}
-
-	_, ok = mx["InspectResult"]
-	if !ok {
-		result.Message = "InspectResult required"
-		return nil
-	}
-	switch mx["InspectResult"].(type) {
-	case string:
-	default:
-		result.Message = "InspectResult should be string"
-		return nil
-	}
-
-	_, ok = mx["SysDate"]
-	if !ok {
-		result.Message = "SysDate required"
-		return nil
-	}
-	switch mx["SysDate"].(type) {
-	case string:
-	default:
-		result.Message = "SysDate should be string"
-		return nil
-	}
-
-	_, ok = mx["Treatment"]
-	if !ok {
-		result.Message = "Treatment required"
-		return nil
-	}
-	switch mx["Treatment"].(type) {
-	case string:
-	default:
-		result.Message = "Treatment should be string"
-		return nil
-	}
-
-	_, ok = mx["id"]
-	if !ok {
-		result.Message = "id required"
-		return nil
-	}
-	switch mx["id"].(type) {
-	case string:
-	default:
-		result.Message = "id should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
-		return nil
-	}
 	var str string
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
@@ -569,79 +248,19 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["DeathObject"]
-	if !ok {
-		result.Message = "DeathObject required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["DeathObject"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "DeathObject should be []string"
+	err2 := verifyParamArrayString(mx,result,[] string{"DeathObject"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["Name"]
-	if !ok {
-		result.Message = "Name required"
-		return nil
-	}
-	switch mx["Name"].(type) {
-	case string:
-	default:
-		result.Message = "Name should be string"
+	err1 := verifyParamString(mx,result,[] string{"Name","CauseDeath","SysDate","TreatMethod","TaskGps"})
+	if err1 != nil {
 		return nil
 	}
 
-	_, ok = mx["CauseDeath"]
-	if !ok {
-		result.Message = "CauseDeath required"
-		return nil
-	}
-	switch mx["CauseDeath"].(type) {
-	case string:
-	default:
-		result.Message = "CauseDeath should be string"
-		return nil
-	}
-
-	_, ok = mx["SysDate"]
-	if !ok {
-		result.Message = "SysDate required"
-		return nil
-	}
-	switch mx["SysDate"].(type) {
-	case string:
-	default:
-		result.Message = "SysDate should be string"
-		return nil
-	}
-
-	_, ok = mx["TreatMethod"]
-	if !ok {
-		result.Message = "TreatMethod required"
-		return nil
-	}
-	switch mx["TreatMethod"].(type) {
-	case string:
-	default:
-		result.Message = "TreatMethod should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
-		return nil
-	}
 	var str string
 	for i := 0; i < len(mx["DeathObject"].([]interface{})); i++ {
 		switch mx["DeathObject"].([]interface{})[i].(type) {
@@ -664,77 +283,16 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["CreatePerson"]
-	if !ok {
-		result.Message = "CreatePerson required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["CreatePerson"].(type) {
-	case string:
-	default:
-		result.Message = "CreatePerson should be string"
+	err2 := verifyParamArrayString(mx,result,[] string{"PNO"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["PNO"]
-	if !ok {
-		result.Message = "PNO required"
-		return nil
-	}
-	switch mx["PNO"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "PNO should be []string"
-		return nil
-	}
-
-	_, ok = mx["CLPCNO"]
-	if !ok {
-		result.Message = "CLPCNO required"
-		return nil
-	}
-	switch mx["CLPCNO"].(type) {
-	case string:
-	default:
-		result.Message = "CLPCNO should be string"
-		return nil
-	}
-
-	_, ok = mx["Name"]
-	if !ok {
-		result.Message = "Name required"
-		return nil
-	}
-	switch mx["Name"].(type) {
-	case string:
-	default:
-		result.Message = "Name should be string"
-		return nil
-	}
-
-	_, ok = mx["SysDate"]
-	if !ok {
-		result.Message = "SysDate required"
-		return nil
-	}
-	switch mx["SysDate"].(type) {
-	case string:
-	default:
-		result.Message = "SysDate should be string"
-		return nil
-	}
-
-	_, ok = mx["TaskGps"]
-	if !ok {
-		result.Message = "TaskGps required"
-		return nil
-	}
-	switch mx["TaskGps"].(type) {
-	case string:
-	default:
-		result.Message = "TaskGps should be string"
+	err1 := verifyParamString(mx,result,[] string{"CreatePerson","CLPCNO","Name","SysDate","TaskGps"})
+	if err1 != nil {
 		return nil
 	}
 	var str string
@@ -757,77 +315,16 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
 	if err != nil {
 		log.Println(err)
-	}
-
-	_, ok := mx["operator"]
-	if !ok {
-		result.Message = "operator required"
+		result.Message = err.Error()
 		return nil
 	}
-	switch mx["operator"].(type) {
-	case string:
-	default:
-		result.Message = "operator should be string"
+	err2 := verifyParamArrayString(mx,result,[] string{"productIds"})
+	if err2 != nil {
 		return nil
 	}
 
-	_, ok = mx["productIds"]
-	if !ok {
-		result.Message = "productIds required"
-		return nil
-	}
-	switch mx["productIds"].(type) {
-	case []interface{}:
-	default:
-		result.Message = "productIds should be []string"
-		return nil
-	}
-
-	_, ok = mx["hookNo"]
-	if !ok {
-		result.Message = "hookNo required"
-		return nil
-	}
-	switch mx["hookNo"].(type) {
-	case string:
-	default:
-		result.Message = "hookNo should be string"
-		return nil
-	}
-
-	_, ok = mx["Name"]
-	if !ok {
-		result.Message = "Name required"
-		return nil
-	}
-	switch mx["operation"].(type) {
-	case string:
-	default:
-		result.Message = "operation should be string"
-		return nil
-	}
-
-	_, ok = mx["butcherTime"]
-	if !ok {
-		result.Message = "butcherTime required"
-		return nil
-	}
-	switch mx["butcherTime"].(type) {
-	case string:
-	default:
-		result.Message = "butcherTime should be string"
-		return nil
-	}
-
-	_, ok = mx["mapPosition"]
-	if !ok {
-		result.Message = "mapPosition required"
-		return nil
-	}
-	switch mx["mapPosition"].(type) {
-	case string:
-	default:
-		result.Message = "mapPosition should be string"
+	err1 := verifyParamString(mx,result,[] string{"operator","hookNo","operation","butcherTime","mapPosition"})
+	if err1 != nil {
 		return nil
 	}
 	var str string
@@ -840,6 +337,40 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 		}
 
 		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":"` + mx["butcherTime"].(string) + `","operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+	}
+	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
+
+	return nil
+}
+
+
+func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *Asset) error {
+	var mx map[string]interface{}
+	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
+	if err != nil {
+		log.Println(err)
+		result.Message = err.Error()
+		return nil
+	}
+	err2 := verifyParamArrayString(mx,result,[] string{"productIds"})
+	if err2 != nil {
+		return nil
+	}
+	err1 := verifyParamString(mx,result,[] string{"operator","operation","waitButcherTime","mapPosition"})
+	if err1 != nil {
+		return nil
+	}
+
+	var str string
+	for i := 0; i < len(mx["productIds"].([]interface{})); i++ {
+		switch mx["productIds"].([]interface{})[i].(type) {
+		case string:
+		default:
+			result.Message = "productIds[" + strconv.Itoa(i) + "] should be string"
+			return nil
+		}
+
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":"` + mx["waitButcherTime"].(string) + `","operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
@@ -902,4 +433,40 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	log.Println(result.Message) // = append(result.Messages, mx["PCList"].([]interface{})[i].(string) + ":" + string(body))
 
 	return
+}
+
+
+func verifyParamString( mx map[string]interface{} , result *Asset , fields []string ) error {
+	for i :=0;i<len(fields) ;i++  {
+		_, ok := mx[fields[i]]
+		if !ok {
+			result.Message = fields[i] + " required"
+			return errors.New(result.Message)
+		}
+		switch mx[fields[i]].(type) {
+		case string:
+		default:
+			result.Message = fields[i] + " should be string"
+			return errors.New(result.Message)
+		}
+	}
+	return nil
+}
+
+
+func verifyParamArrayString( mx map[string]interface{} , result *Asset , fields []string ) error {
+	for i :=0;i<len(fields) ;i++  {
+		_, ok := mx[fields[i]]
+		if !ok {
+			result.Message = fields[i] + " required"
+			return errors.New(result.Message)
+		}
+		switch mx[fields[i]].(type) {
+		case []interface{}:
+		default:
+			result.Message = fields[i] + " should be []string"
+			return errors.New(result.Message)
+		}
+	}
+	return nil
 }
