@@ -752,6 +752,100 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 
 	return nil
 }
+func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asset) error {
+	var mx map[string]interface{}
+	err := json.Unmarshal([]byte(args["body"]["b"][0]), &mx)
+	if err != nil {
+		log.Println(err)
+	}
+
+	_, ok := mx["operator"]
+	if !ok {
+		result.Message = "operator required"
+		return nil
+	}
+	switch mx["operator"].(type) {
+	case string:
+	default:
+		result.Message = "operator should be string"
+		return nil
+	}
+
+	_, ok = mx["productIds"]
+	if !ok {
+		result.Message = "productIds required"
+		return nil
+	}
+	switch mx["productIds"].(type) {
+	case []interface{}:
+	default:
+		result.Message = "productIds should be []string"
+		return nil
+	}
+
+	_, ok = mx["hookNo"]
+	if !ok {
+		result.Message = "hookNo required"
+		return nil
+	}
+	switch mx["hookNo"].(type) {
+	case string:
+	default:
+		result.Message = "hookNo should be string"
+		return nil
+	}
+
+	_, ok = mx["Name"]
+	if !ok {
+		result.Message = "Name required"
+		return nil
+	}
+	switch mx["operation"].(type) {
+	case string:
+	default:
+		result.Message = "operation should be string"
+		return nil
+	}
+
+	_, ok = mx["butcherTime"]
+	if !ok {
+		result.Message = "butcherTime required"
+		return nil
+	}
+	switch mx["butcherTime"].(type) {
+	case string:
+	default:
+		result.Message = "butcherTime should be string"
+		return nil
+	}
+
+	_, ok = mx["mapPosition"]
+	if !ok {
+		result.Message = "mapPosition required"
+		return nil
+	}
+	switch mx["mapPosition"].(type) {
+	case string:
+	default:
+		result.Message = "mapPosition should be string"
+		return nil
+	}
+	var str string
+	for i := 0; i < len(mx["productIds"].([]interface{})); i++ {
+		switch mx["productIds"].([]interface{})[i].(type) {
+		case string:
+		default:
+			result.Message = "productIds[" + strconv.Itoa(i) + "] should be string"
+			return nil
+		}
+
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":"` + mx["butcherTime"].(string) + `","operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+	}
+	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
+
+	return nil
+}
+
 //批量或者单个操作
 func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	m := make(map[string]interface{})
