@@ -137,7 +137,7 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"},`
 	}
 	batchOrSingleOperate("Feed",str,args["header"]["Authorization"][0],result)
 	return nil
@@ -172,7 +172,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"},`
 
 	}
 	batchOrSingleOperate("Vaccine",str,args["header"]["Authorization"][0],result)
@@ -208,7 +208,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 		}
 		ctime = formatUnix(mx["CheckDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
+		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"},`
 	}
 	batchOrSingleOperate("Exam",str,args["header"]["Authorization"][0],result)
 	log.Println(result)
@@ -246,7 +246,7 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"},`
 
 	}
 	batchOrSingleOperate("Save",str,args["header"]["Authorization"][0],result)
@@ -284,7 +284,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
+		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"},`
 
 	}
 	batchOrSingleOperate("Lost",str,args["header"]["Authorization"][0],result)
@@ -320,7 +320,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + timeS + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + timeS + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"},`
 	}
 	batchOrSingleOperate("Output",str,args["header"]["Authorization"][0],result)
 
@@ -354,7 +354,7 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 		}
 		ctime = formatUnix(mx["butcherTime"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"},`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
@@ -390,7 +390,7 @@ func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *
 		}
 		ctime = formatUnix(mx["waitButcherTime"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"},`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
