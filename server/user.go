@@ -44,12 +44,12 @@ func (this Remote) Login(args []byte, result *LoginResult) error {
 		return err
 	}
 
-	var r interface{}
-	err = global.Call("Remote.SessionInsertion", body, &r)
-	if err != nil {
-		log.Println(err.Error())
-		return err
-	}
+	//var r interface{}
+	//err = global.Call("Remote.SessionInsertion", body, &r)
+	//if err != nil {
+	//	log.Println(err.Error())
+	//	return err
+	//}
 
 	err = json.Unmarshal(body, result)
 	if err != nil {
