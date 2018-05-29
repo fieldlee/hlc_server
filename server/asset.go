@@ -395,7 +395,7 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	}
 
 	reader := bytes.NewReader(mJSON)
-
+	log.Println(string(mJSON))
 	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/channels/mychannel/chaincodes/jiakechaincode", reader)
 	if err != nil {
 		log.Println(err.Error())
