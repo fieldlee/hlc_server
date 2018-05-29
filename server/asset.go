@@ -127,6 +127,7 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 	}
 
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
 		case string:
@@ -134,8 +135,9 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 			result.Message = "PNO[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
+		ctime = formatUnix(mx["SysDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
 	}
 	batchOrSingleOperate("Feed",str,args["header"]["Authorization"][0],result)
 	return nil
@@ -160,6 +162,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 		return nil
 	}
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
 		case string:
@@ -167,8 +170,9 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 			result.Message = "PNO[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"}`
+		ctime = formatUnix(mx["SysDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"}`
 
 	}
 	batchOrSingleOperate("Vaccine",str,args["header"]["Authorization"][0],result)
@@ -194,6 +198,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 	}
 
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["EarTag"].([]interface{})); i++ {
 		switch mx["EarTag"].([]interface{})[i].(type) {
 		case string:
@@ -201,8 +206,9 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 			result.Message = "EarTag[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + string(formatUnix(mx["CheckDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
+		ctime = formatUnix(mx["CheckDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
 	}
 	batchOrSingleOperate("Exam",str,args["header"]["Authorization"][0],result)
 	log.Println(result)
@@ -230,6 +236,7 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 	}
 
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
 		case string:
@@ -237,8 +244,9 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 			result.Message = "PNO[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
+		ctime = formatUnix(mx["SysDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
 
 	}
 	batchOrSingleOperate("Save",str,args["header"]["Authorization"][0],result)
@@ -266,6 +274,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 	}
 
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["DeathObject"].([]interface{})); i++ {
 		switch mx["DeathObject"].([]interface{})[i].(type) {
 		case string:
@@ -273,8 +282,9 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 			result.Message = "DeathObject[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
+		ctime = formatUnix(mx["SysDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
 
 	}
 	batchOrSingleOperate("Lost",str,args["header"]["Authorization"][0],result)
@@ -300,6 +310,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 		return nil
 	}
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["PNO"].([]interface{})); i++ {
 		switch mx["PNO"].([]interface{})[i].(type) {
 		case string:
@@ -307,8 +318,9 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 			result.Message = "PNO[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
+		ctime = formatUnix(mx["SysDate"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + timeS + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
 	}
 	batchOrSingleOperate("Output",str,args["header"]["Authorization"][0],result)
 
@@ -332,6 +344,7 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 		return nil
 	}
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["productIds"].([]interface{})); i++ {
 		switch mx["productIds"].([]interface{})[i].(type) {
 		case string:
@@ -339,8 +352,9 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 			result.Message = "productIds[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":` + string(formatUnix(mx["butcherTime"].(string))) + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		ctime = formatUnix(mx["butcherTime"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
@@ -366,6 +380,7 @@ func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *
 	}
 
 	var str string
+	var ctime int64
 	for i := 0; i < len(mx["productIds"].([]interface{})); i++ {
 		switch mx["productIds"].([]interface{})[i].(type) {
 		case string:
@@ -373,7 +388,9 @@ func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *
 			result.Message = "productIds[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + string(formatUnix(mx["butcherTime"].(string))) + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		ctime = formatUnix(mx["waitButcherTime"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
