@@ -11,6 +11,7 @@ import (
 
 	"model"
 	"errors"
+	"time"
 )
 
 type Asset struct {
@@ -19,6 +20,7 @@ type Asset struct {
 	Timestamp	int64	`json:"timestamp"`
 	Message		string	`json:"message"`
 	Messages	[]string	`json:"messages"`
+	ErrorList	[]map[string] interface{} `json:"errorList"`
 }
 //批量入栏 和 单个 入栏相同
 func (this Remote)AssetRegister(args map[string]map[string][]string, result *Asset) error {
@@ -39,7 +41,7 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 		return nil
 	}
 	var str string
-
+	var ctime int64
 	for i := 0; i < len(mx["PCList"].([]interface{})); i++ {
 		switch mx["PCList"].([]interface{})[i].(type) {
 		case string:
@@ -47,8 +49,10 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 			result.Message = "PCList[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lairage","operator":"` + mx["CreatePerson"].(string) + `","createTime":"` + mx["createTime"].(string) + `"},`
+		ctime = formatUnix(mx["createTime"].(string))
+		timeS := strconv.FormatInt(ctime,10)
+		log.Println(timeS)
+		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lairage","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
 	}
 
 	batchOrSingleOperate("Register",str,args["header"]["Authorization"][0],result)
@@ -131,7 +135,7 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"}`
 	}
 	batchOrSingleOperate("Feed",str,args["header"]["Authorization"][0],result)
 	return nil
@@ -164,7 +168,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"}`
 
 	}
 	batchOrSingleOperate("Vaccine",str,args["header"]["Authorization"][0],result)
@@ -198,7 +202,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 			return nil
 		}
 
-		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":"` + mx["CheckDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
+		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + string(formatUnix(mx["CheckDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"}`
 	}
 	batchOrSingleOperate("Exam",str,args["header"]["Authorization"][0],result)
 	log.Println(result)
@@ -234,7 +238,7 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"}`
 
 	}
 	batchOrSingleOperate("Save",str,args["header"]["Authorization"][0],result)
@@ -270,7 +274,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 			return nil
 		}
 
-		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":"` + mx["SysDate"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
+		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"}`
 
 	}
 	batchOrSingleOperate("Lost",str,args["header"]["Authorization"][0],result)
@@ -304,7 +308,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 			return nil
 		}
 
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":"` + mx["SysDate"].(string) + `","operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + string(formatUnix(mx["SysDate"].(string))) + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"}`
 	}
 	batchOrSingleOperate("Output",str,args["header"]["Authorization"][0],result)
 
@@ -336,7 +340,7 @@ func (this Remote)AssetButcher(args map[string]map[string][]string, result *Asse
 			return nil
 		}
 
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":"` + mx["butcherTime"].(string) + `","operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","hookNo":"` + mx["hookNo"].(string) + `","butcherTime":` + string(formatUnix(mx["butcherTime"].(string))) + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
@@ -369,8 +373,7 @@ func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *
 			result.Message = "productIds[" + strconv.Itoa(i) + "] should be string"
 			return nil
 		}
-
-		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":"` + mx["waitButcherTime"].(string) + `","operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
+		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + string(formatUnix(mx["butcherTime"].(string))) + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"}`
 	}
 	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
 
@@ -382,7 +385,6 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	m := make(map[string]interface{})
 	m["fcn"] = fcn
 	m["args"] = make([]string, 1)
-	m["peers"] = []string{"peer1"}
 	m["args"].([]string)[0] = "[" + str[0:len(str) - 1] + "]"
 
 	log.Println(m)
@@ -395,8 +397,8 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	}
 
 	reader := bytes.NewReader(mJSON)
-
-	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/channels/mychannel/chaincodes/hlccc", reader)
+	log.Println(string(mJSON))
+	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/channels/chaincodes/jiakechaincode", reader)
 	if err != nil {
 		log.Println(err.Error())
 		result.Message = err.Error()
@@ -469,4 +471,10 @@ func verifyParamArrayString( mx map[string]interface{} , result *Asset , fields 
 		}
 	}
 	return nil
+}
+
+func formatUnix( t2 string ) int64{
+	timeLayout := "2006-01-02 15:04:05"
+	tm2, _ := time.Parse(timeLayout, t2)
+	return tm2.Unix()
 }
