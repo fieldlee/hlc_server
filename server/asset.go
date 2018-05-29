@@ -392,7 +392,7 @@ func (this Remote)AssetWaitButcher(args map[string]map[string][]string, result *
 		timeS := strconv.FormatInt(ctime,10)
 		str += `{"productId":"` + mx["productIds"].([]interface{})[i].(string) + `","waitButcherTime":` + timeS + `,"operation":"`+mx["operation"].(string)+`","operator":"` + mx["operator"].(string) + `","mapPosition":"` + mx["mapPosition"].(string) + `"},`
 	}
-	batchOrSingleOperate("Butcher",str,args["header"]["Authorization"][0],result)
+	batchOrSingleOperate("WaitButcher",str,args["header"]["Authorization"][0],result)
 
 	return nil
 }
