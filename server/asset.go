@@ -382,7 +382,6 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	m := make(map[string]interface{})
 	m["fcn"] = fcn
 	m["args"] = make([]string, 1)
-	m["peers"] = []string{"peer1"}
 	m["args"].([]string)[0] = "[" + str[0:len(str) - 1] + "]"
 
 	log.Println(m)
@@ -396,7 +395,7 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 
 	reader := bytes.NewReader(mJSON)
 
-	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/channels/mychannel/chaincodes/hlccc", reader)
+	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/channels/mychannel/chaincodes/jiakechaincode", reader)
 	if err != nil {
 		log.Println(err.Error())
 		result.Message = err.Error()
