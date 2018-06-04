@@ -54,7 +54,7 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 		log.Println(timeS)
 		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lairage","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
 	}
-
+	log.Println(args["header"]["Authorization"])
 	batchOrSingleOperate("Register",str,args["header"]["Authorization"][1],result)
 	return nil
 }
