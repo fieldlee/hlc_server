@@ -121,7 +121,6 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	switch params["action"] {
 	case "init":
 		uri = "/channels/query/init"
-		log.Println("123")
 		break;
 	case "blocks":
 		uri = "/channels/query/blocks?hight="+params["hight"].(string)
@@ -132,13 +131,13 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	case "history":
 		m["fcn"] = "querytransfer"
 		m["args"] = make([]string, 1)
-		m["args"].([]string)[0] = `{"productId":`+params["id"].(string)+`}`
+		m["args"].([]string)[0] = `{"productId":"`+params["id"].(string)+`"}`
 		uri = "/channels/query/chaincode/" + params["chaincode"].(string)
 		break;
 	case "detail":
 		m["fcn"] = "querybyproduct"
 		m["args"] = make([]string, 1)
-		m["args"].([]string)[0] = `{"productId":`+params["id"].(string)+`}`
+		m["args"].([]string)[0] = `{"productId":"`+params["id"].(string)+`"}`
 		uri = "/channels/query/chaincode/" + params["chaincode"].(string)
 		break;
 	}
