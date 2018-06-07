@@ -107,6 +107,11 @@ func (this Remote)AssetQueryDetail(args map[string]map[string][]string, result *
 
 	return nil
 }
+func (this Remote)AssetQuery(args map[string]map[string][]string, result *Asset) error {
+	log.Println(args["body"]["b"])
+	result.Message = "500:服务器内部错误:"
+	return nil
+}
 //批量喂养  喂养
 func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) error {
 	var mx map[string]interface{}
