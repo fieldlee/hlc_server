@@ -121,6 +121,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	switch params["action"] {
 	case "init":
 		uri = "/channels/query/init"
+		log.Println("123")
 		break;
 	case "blocks":
 		uri = "/channels/query/blocks?hight="+params["hight"].(string)
@@ -149,6 +150,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	}
 	reader := bytes.NewReader(mJSON)
 	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri, reader)
+	log.Println("http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri)
 	request.Header.Set("Content-Type", "application/json;charset=utf-8")
 	request.Header.Set("authorization", args["header"]["Authorization"][0])
 	client := http.Client{}
