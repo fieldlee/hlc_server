@@ -128,6 +128,9 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	case "transaction":
 		uri = "/channels/query/block/" + params["block_id"].(string)
 		break;
+	case "transactionbyid":
+		uri = "/channels/query/transaction/" + params["tx_id"].(string)
+		break;
 	case "history":
 		m["fcn"] = "querytransfer"
 		m["args"] = make([]string, 1)
