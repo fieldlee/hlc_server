@@ -22,6 +22,7 @@ type Asset struct {
 	Messages	[]string	`json:"messages"`
 	ErrorList	[]map[string] interface{} `json:"errorList"`
 }
+
 //批量入栏 和 单个 入栏相同
 func (this Remote)AssetRegister(args map[string]map[string][]string, result *Asset) error {
 	var mx map[string]interface{}
@@ -105,6 +106,74 @@ func (this Remote)AssetQueryDetail(args map[string]map[string][]string, result *
 		return err
 	}
 
+	return nil
+}
+func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[string] interface{}) error {
+	var params map[string] interface{}
+	err := json.Unmarshal([]byte(args["body"]["b"][0]),&params)
+	if err != nil{
+		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
+		return err
+	}
+	uri := ""
+	m := make(map[string]interface{})
+	m["peer"] = params["peer"]
+	switch params["action"] {
+	case "init":
+		uri = "/channels/query/init"
+		break;
+	case "blocks":
+		uri = "/channels/query/blocks?hight="+params["hight"].(string)
+		break;
+	case "transaction":
+		uri = "/channels/query/block/" + params["block_id"].(string)
+		break;
+	case "history":
+		m["fcn"] = "querytransfer"
+		m["args"] = make([]string, 1)
+		m["args"].([]string)[0] = `{"productId":"`+params["id"].(string)+`"}`
+		uri = "/channels/query/chaincode/" + params["chaincode"].(string)
+		break;
+	case "detail":
+		m["fcn"] = "querybyproduct"
+		m["args"] = make([]string, 1)
+		m["args"].([]string)[0] = `{"productId":"`+params["id"].(string)+`"}`
+		uri = "/channels/query/chaincode/" + params["chaincode"].(string)
+		break;
+	}
+	mJSON, err := json.Marshal(m)
+	if err != nil {
+		log.Println(err.Error())
+		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
+		return err
+	}
+	reader := bytes.NewReader(mJSON)
+	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri, reader)
+	log.Println("http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri)
+	request.Header.Set("Content-Type", "application/json;charset=utf-8")
+	request.Header.Set("authorization", args["header"]["Authorization"][0])
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		log.Println(err.Error())
+		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
+		return err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Println(err.Error())
+		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
+		return err
+	}
+
+	err = json.Unmarshal(body, result)
+	if err != nil {
+		log.Println(err.Error())
+		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
+		return err
+	}
 	return nil
 }
 //批量喂养  喂养
