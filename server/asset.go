@@ -178,7 +178,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	fmt.Println(string(body))
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		log.Println(err.Error())
+		log.Println("json error=============",err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
 		return err
 	}
