@@ -114,7 +114,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	err := json.Unmarshal([]byte(args["body"]["b"][0]),&params)
 	if err != nil{
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	uri := ""
 	m := make(map[string]interface{})
@@ -153,7 +153,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	reader := bytes.NewReader(mJSON)
 	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri, reader)
@@ -165,7 +165,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	defer resp.Body.Close()
 
@@ -173,7 +173,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	fmt.Println(string(body))
 	err = json.Unmarshal(body, &result)
