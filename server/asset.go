@@ -12,6 +12,7 @@ import (
 	"model"
 	"errors"
 	"time"
+	"fmt"
 )
 
 type Asset struct {
@@ -513,6 +514,7 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
 	if err != nil {
 		log.Println(err.Error())
 		result.Message = err.Error()
