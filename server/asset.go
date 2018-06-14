@@ -146,7 +146,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 		break;
 	default:
 		json.Unmarshal([]byte(`{"code":400,"msg":"请求的方法不存在！","data":{}}`),&result)
-		return errors.New("请求的方法不存在！")
+		return nil
 		break
 	}
 	mJSON, err := json.Marshal(m)
