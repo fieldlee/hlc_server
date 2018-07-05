@@ -12,6 +12,7 @@ import (
 	"model"
 	"errors"
 	"time"
+	"fmt"
 )
 
 type Asset struct {
@@ -53,7 +54,7 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 		ctime = formatUnix(mx["createTime"].(string))
 		timeS := strconv.FormatInt(ctime,10)
 		log.Println(timeS)
-		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lairage","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
+		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lairage")+`","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
 	}
 	log.Println(args["header"]["Authorization"])
 	batchOrSingleOperate("Register",str,args["header"]["Authorization"][0],result)
@@ -113,7 +114,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	err := json.Unmarshal([]byte(args["body"]["b"][0]),&params)
 	if err != nil{
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	uri := ""
 	m := make(map[string]interface{})
@@ -128,6 +129,9 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	case "transaction":
 		uri = "/channels/query/block/" + params["block_id"].(string)
 		break;
+	case "transactionbyid":
+		uri = "/channels/query/transaction/" + params["tx_id"].(string)
+		break;
 	case "history":
 		m["fcn"] = "querytransfer"
 		m["args"] = make([]string, 1)
@@ -140,12 +144,16 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 		m["args"].([]string)[0] = `{"productId":"`+params["id"].(string)+`"}`
 		uri = "/channels/query/chaincode/" + params["chaincode"].(string)
 		break;
+	default:
+		json.Unmarshal([]byte(`{"code":400,"msg":"请求的方法不存在！","data":{}}`),&result)
+		return nil
+		break
 	}
 	mJSON, err := json.Marshal(m)
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	reader := bytes.NewReader(mJSON)
 	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + uri, reader)
@@ -157,7 +165,7 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	defer resp.Body.Close()
 
@@ -165,14 +173,14 @@ func (this Remote)AssetQuery(args map[string]map[string][]string, result *map[st
 	if err != nil {
 		log.Println(err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
-
-	err = json.Unmarshal(body, result)
+	fmt.Println(string(body))
+	err = json.Unmarshal(body, &result)
 	if err != nil {
-		log.Println(err.Error())
+		log.Println("json error=============",err.Error())
 		json.Unmarshal([]byte(`{"code":400,"msg":"`+err.Error()+`","data":{}}`),&result)
-		return err
+		return nil
 	}
 	return nil
 }
@@ -206,7 +214,7 @@ func (this Remote)AssetFeed(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Feed"},`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","feedName":"` + mx["Id"].(string) + `","feedTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Feed")+`"},`
 	}
 	batchOrSingleOperate("Feed",str,args["header"]["Authorization"][0],result)
 	return nil
@@ -241,7 +249,7 @@ func (this Remote)AssetMedication(args map[string]map[string][]string, result *A
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Medication","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"},`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","vaccineName":"` + mx["id"].(string) + `","VaccineTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Medication")+`","vaccineType":"vaccineType","vaccineNumber":"vaccineNumber"},`
 
 	}
 	batchOrSingleOperate("Vaccine",str,args["header"]["Authorization"][0],result)
@@ -277,7 +285,7 @@ func (this Remote)AssetPrevention(args map[string]map[string][]string, result *A
 		}
 		ctime = formatUnix(mx["CheckDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Prevention"},`
+		str += `{"productId":"` + mx["EarTag"].([]interface{})[i].(string) + `","operator":"` + mx["OperatorName"].(string) + `","examConsequence":"` + mx["CheckResult"].(string) + `","examTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Prevention")+`"},`
 	}
 	batchOrSingleOperate("Exam",str,args["header"]["Authorization"][0],result)
 	log.Println(result)
@@ -315,7 +323,7 @@ func (this Remote)AssetSave(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Save"},`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","saveNumber":"` + mx["id"].(string) + `","saveName":"saveName","saveType":"` + mx["Treatment"].(string) + `","saveConsequence":"` + mx["InspectResult"].(string) + `","saveTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Save")+`"},`
 
 	}
 	batchOrSingleOperate("Save",str,args["header"]["Authorization"][0],result)
@@ -353,7 +361,7 @@ func (this Remote)AssetLost(args map[string]map[string][]string, result *Asset) 
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"Lost"},`
+		str += `{"productId":"` + mx["DeathObject"].([]interface{})[i].(string) + `","operator":"` + mx["Name"].(string) + `","lostWay":"` + mx["TreatMethod"].(string) + `","lostReaso":"` + mx["CauseDeath"].(string) + `","lostTime":` + timeS + `,"mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lost")+`"},`
 
 	}
 	batchOrSingleOperate("Lost",str,args["header"]["Authorization"][0],result)
@@ -389,7 +397,7 @@ func (this Remote)AssetFattened(args map[string]map[string][]string, result *Ass
 		}
 		ctime = formatUnix(mx["SysDate"].(string))
 		timeS := strconv.FormatInt(ctime,10)
-		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + timeS + `,"operation":"Fattened","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"},`
+		str += `{"productId":"` + mx["PNO"].([]interface{})[i].(string) + `","name":"` + mx["Name"].(string) + `","outputTime":` + timeS + `,"operation":"`+getLan(args,"Fattened")+`","operator":"` + mx["CreatePerson"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `"},`
 	}
 	batchOrSingleOperate("Output",str,args["header"]["Authorization"][0],result)
 
@@ -506,6 +514,7 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
+	fmt.Println(string(body))
 	if err != nil {
 		log.Println(err.Error())
 		result.Message = err.Error()
@@ -564,4 +573,27 @@ func formatUnix( t2 string ) int64{
 	timeLayout := "2006-01-02 15:04:05"
 	tm2, _ := time.Parse(timeLayout, t2)
 	return tm2.Unix()*1000
+}
+
+func getLan(headers map[string]map[string][]string, action string) string {
+	Language :=make(map[string] string)
+	fmt.Println(headers["header"]["Lan"])
+	if headers["header"]["Lan"][0] == "en"{
+		return action
+	}
+	Language["Lairage"] = "入栏"
+	Language["Feed"] = "喂养"
+	Language["Medication"] = "防疫"
+	Language["Prevention"] = "检疫"
+	Language["Save"] = "救治"
+	Language["Lost"] = "灭失"
+	Language["Lost"] = "出栏"
+	_ ,ok:= Language[action]
+	if ok {
+		fmt.Println(action)
+		return Language[action]
+	}
+
+	fmt.Println(Language[action])
+	return "无对应操作"
 }
