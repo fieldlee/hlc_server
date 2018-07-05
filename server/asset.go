@@ -13,6 +13,7 @@ import (
 	"errors"
 	"time"
 	"fmt"
+	"strings"
 )
 
 type Asset struct {
@@ -501,6 +502,10 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 
 	request.Header.Set("Content-Type", "application/json;charset=utf-8")
 	log.Println(auth)
+	//兼容新旧版本token
+	if !strings.Contains(auth,"Bearer") {
+		auth = "Bearer "+auth
+	}
 	request.Header.Set("authorization", auth)
 
 	client := http.Client{}
