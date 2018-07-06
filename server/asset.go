@@ -13,6 +13,7 @@ import (
 	"errors"
 	"time"
 	"fmt"
+	"strings"
 )
 
 type Asset struct {
@@ -501,6 +502,10 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 
 	request.Header.Set("Content-Type", "application/json;charset=utf-8")
 	log.Println(auth)
+	//兼容新旧版本token
+	if !strings.Contains(auth,"Bearer") {
+		auth = "Bearer "+auth
+	}
 	request.Header.Set("authorization", auth)
 
 	client := http.Client{}
@@ -587,7 +592,7 @@ func getLan(headers map[string]map[string][]string, action string) string {
 	Language["Prevention"] = "检疫"
 	Language["Save"] = "救治"
 	Language["Lost"] = "灭失"
-	Language["Lost"] = "出栏"
+	Language["Fattened"] = "出栏"
 	_ ,ok:= Language[action]
 	if ok {
 		fmt.Println(action)
