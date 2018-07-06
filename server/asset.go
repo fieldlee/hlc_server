@@ -592,7 +592,7 @@ func getLan(headers map[string]map[string][]string, action string) string {
 	Language["Prevention"] = "检疫"
 	Language["Save"] = "救治"
 	Language["Lost"] = "灭失"
-	Language["Lost"] = "出栏"
+	Language["Fattened"] = "出栏"
 	_ ,ok:= Language[action]
 	if ok {
 		fmt.Println(action)
