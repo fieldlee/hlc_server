@@ -14,6 +14,7 @@ import (
 	"time"
 	"fmt"
 	"strings"
+	"math/rand"
 )
 
 type Asset struct {
@@ -55,7 +56,9 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 		ctime = formatUnix(mx["createTime"].(string))
 		timeS := strconv.FormatInt(ctime,10)
 		log.Println(timeS)
-		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lairage")+`","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
+		var s string
+		s = fmt.Sprintf("%s%s",mx["PCList"].([]interface{})[i].(string),randomString(10))
+		str += `{"productId":"` + s + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lairage")+`","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
 	}
 	log.Println(args["header"]["Authorization"])
 	batchOrSingleOperate("Register",str,args["header"]["Authorization"][0],result)
@@ -602,4 +605,22 @@ func getLan(headers map[string]map[string][]string, action string) string {
 
 	fmt.Println(Language[action])
 	return "无对应操作"
+}
+
+func randomString (l int ) string         {
+	var result   bytes.Buffer
+	var temp string
+	for i:=0 ; i<l ;  {
+		if string(randInt(65,90))!=temp {
+			temp = string(randInt(65,90))
+			result.WriteString(temp)
+			i++
+		}
+	}
+	return result.String()
+}
+
+func randInt(min int , max int) int {
+	rand.Seed(time.Now().UTC().UnixNano())
+	return min + rand.Intn(max-min)
 }
