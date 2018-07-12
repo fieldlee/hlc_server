@@ -56,9 +56,9 @@ func (this Remote)AssetRegister(args map[string]map[string][]string, result *Ass
 		ctime = formatUnix(mx["createTime"].(string))
 		timeS := strconv.FormatInt(ctime,10)
 		log.Println(timeS)
-		var s string
-		s = fmt.Sprintf("%s%s",mx["PCList"].([]interface{})[i].(string),randomString(10))
-		str += `{"productId":"` + s + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lairage")+`","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
+		//var s string
+		//s = fmt.Sprintf("%s%s",mx["PCList"].([]interface{})[i].(string),randomString(10))
+		str += `{"productId":"` + mx["PCList"].([]interface{})[i].(string) + `","batchNumber":"` + mx["PCNO"].(string) + `","kind":"` + mx["isType"].(string) + `","type":"` + mx["species"].(string) + `","mapPosition":"` + mx["TaskGps"].(string) + `","operation":"`+getLan(args,"Lairage")+`","operator":"` + mx["CreatePerson"].(string) + `","createTime":` + timeS + `},`
 	}
 	log.Println(args["header"]["Authorization"])
 	batchOrSingleOperate("Register",str,args["header"]["Authorization"][0],result)
