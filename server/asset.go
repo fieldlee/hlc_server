@@ -578,9 +578,9 @@ func verifyParamArrayString( mx map[string]interface{} , result *Asset , fields 
 }
 
 func formatUnix( t2 string ) int64{
-	timeLayout := "2006-01-02 15:04:05"
-	tm2, _ := time.Parse(timeLayout, t2)
-	return tm2.Unix()*1000
+	loc, _ := time.LoadLocation("Asia/Shanghai")
+	dt, _ := time.ParseInLocation("2006-01-02 15:04:05", t2, loc)
+	return dt.Unix()*1000
 }
 
 func getLan(headers map[string]map[string][]string, action string) string {
