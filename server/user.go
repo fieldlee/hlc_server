@@ -21,8 +21,8 @@ type LoginResult struct {
 
 func (this Remote) Login(args []byte, result *LoginResult) error {
 	reader := bytes.NewReader(args)
-
-	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/login", reader)
+	log.Println("http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/users")
+	request, err := http.NewRequest("POST", "http://" + model.CHAIN_CODE_DOMAIN + ":" + model.CHAIN_CODE_PORT + "/users", reader)
 	if err != nil {
 		log.Println(err.Error())
 		return err
