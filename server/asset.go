@@ -532,7 +532,9 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 		result.Message = "JSON Unmarshal error:" + err.Error()
 		return
 	}
-
+	if !result.Success {
+		result.Message = "Operate Failed"
+	}
 	log.Println(result.Message) // = append(result.Messages, mx["PCList"].([]interface{})[i].(string) + ":" + string(body))
 
 	return
