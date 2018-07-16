@@ -535,7 +535,9 @@ func batchOrSingleOperate(fcn string,str string,auth string ,result *Asset){
 		result.Message = "JSON Unmarshal error:" + err.Error()
 		return
 	}
-
+	if !result.Success {
+		result.Message = "Operate Failed"
+	}
 	log.Println(result.Message) // = append(result.Messages, mx["PCList"].([]interface{})[i].(string) + ":" + string(body))
 
 	return
@@ -596,6 +598,7 @@ func getLan(headers map[string]map[string][]string, action string) string {
 	Language["Save"] = "救治"
 	Language["Lost"] = "灭失"
 	Language["Fattened"] = "出栏"
+	Language["Operate-Failed"] = "操作失败"
 	_ ,ok:= Language[action]
 	if ok {
 		fmt.Println(action)
